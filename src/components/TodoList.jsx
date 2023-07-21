@@ -30,9 +30,13 @@ const TodoList = () => {
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/todos")
       .then((response) => response.json())
-      .then((data) =>
-        setTodos((prevTodos) => [...prevTodos, ...data.slice(0, 5)])
-      ); // Append fetched data to existing todos
+      .then((data) => {
+        const uniqueIdsData = data.slice(0, 5).map((todo) => ({
+          ...todo,
+          id: `api_${todo.id}`, // Use a prefix to create unique ids
+        }));
+        setTodos(uniqueIdsData); // Replace the existing todos with the fetched data
+      });
   }, []);
 
   // useEffect hook to log messages whenever the todo list is updated
